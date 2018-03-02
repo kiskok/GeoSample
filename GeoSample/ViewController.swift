@@ -7,14 +7,37 @@
 //
 
 import UIKit
+import MapKit
 
 class ViewController: UIViewController {
 
+    
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var radiusTextField: UITextField!
+    
+    let locationManager = CLLocationManager()
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        locationManager.requestAlwaysAuthorization()
+
+
     }
 
+    
+    @IBAction func didTapRegisterButton(_ sender: Any) {
+            
+        let cooridate = mapView.centerCoordinate
+        let radius = Double(radiusTextField.text!) ?? 0
+        
+        let region = CLCircularRegion(center: cooridate, radius: radius, identifier: UUID().uuidString)
+        region.notifyOnEntry = true
+        
+        locationManager.startMonitoring(for: region)
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
